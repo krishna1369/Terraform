@@ -1,9 +1,9 @@
 name: "Terraform Plan"
 
 on:
-  push:
-    branches:
-      - feature
+  pull_request:
+    branches: 
+      - main
 
 jobs:
   terraform:
