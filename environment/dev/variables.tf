@@ -34,13 +34,3 @@ variable "iam_instance_profile" {
   description = "IAM instance profile"
   default     = null
 }
-
-variable "s3_bucket" {
-  type        = string
-  description = "S3 bucket for Terraform state"
-}
-
-variable "environment" {
-  type        = string
-  description = "Environment name (e.g., dev, prod)"
-}
