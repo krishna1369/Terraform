@@ -25,9 +25,12 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: |
+          cd environment/dev
+          terraform init
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'push'
+        working-directory: ./environment/dev
         run: terraform plan -no-color
