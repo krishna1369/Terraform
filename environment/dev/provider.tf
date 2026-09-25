@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.6.0"
+  required_version = ">= 1.5.4"
 
   required_providers {
     aws = {
@@ -8,11 +8,7 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket         = var.s3_bucket
-    key            = "${var.environment}/terraform.tfstate"
-    region         = var.aws_region
-  }
+  backend "s3" {}
 }
 
 provider "aws" {
