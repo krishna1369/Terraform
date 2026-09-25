@@ -4,16 +4,19 @@ on:
   push:
     branches:
       - feature
-  
+
 jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-24.04
+
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}   
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
     steps:
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -22,15 +25,19 @@ jobs:
         with:
           terraform_version: 1.15.8
 
-
       - name: Terraform Init
-        id: init
+        working-directory: ./environment/dev
         run: |
-          cd environment/dev
-          terraform init
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="key=dev/terraform.tfstate" \
+            -backend-config="region=${{ secrets.AWS_DEFAULT_REGION }}"
+
+      - name: Terraform Validate
+        working-directory: ./environment/dev
+        run: terraform validate
 
       - name: Terraform Plan
         id: plan
-        if: github.event_name == 'push'
         working-directory: ./environment/dev
         run: terraform plan -no-color
